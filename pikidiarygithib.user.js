@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         pikidiary-github-thing
-// @version      2
+// @version      3
 // @description  replaces icon for links with pikidiary.lol in like bio thing
 // @author       @squirrel on pikidiary
 // @match        https://github.com/*
@@ -8,7 +8,7 @@
 // @grant        none
 // @namespace    http://tampermonkey.net/
 // ==/UserScript==
-(function() {
+(function () {
     'use strict';
     const iconforpikidiary = 'https://raw.githubusercontent.com/5quirre1/pikidiary-github-thing/refs/heads/main/pikidairy.png';
     function replace() {
@@ -35,13 +35,20 @@
             }
         });
     }
+    // fixed
+    let timeout;
+    const debouncedReplace = () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            replace();
+        }, 100);
+    };
     replace();
-    const observer = new MutationObserver(mutations => {
-        mutations.forEach(mutation => {
-            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                replace();
-            }
-        });
+    const observer = new MutationObserver(() => {
+        debouncedReplace();
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
 })();

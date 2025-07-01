@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         pikidiary-github-thing
-// @version      1
+// @version      2
 // @description  replaces icon for links with pikidiary.lol in like bio thing
 // @author       @squirrel on pikidiary
 // @match        https://github.com/*
@@ -19,6 +19,7 @@
                     const swagd = document.createElement('img');
                     swagd.src = iconforpikidiary;
                     swagd.alt = 'pikidiary';
+                    swagd.title = 'pikidiary';
                     swagd.width = 16;
                     swagd.height = 16;
                     swagd.style.verticalAlign = 'middle';
@@ -26,6 +27,10 @@
                     swagd.style.top = '2px';
                     swagd.style.marginRight = '4px';
                     thing.replaceWith(swagd);
+                }
+                const match = link.href.match(/https:\/\/pikidiary\.lol\/(?:@)?([\w.-]+)/);
+                if (match && match[1]) {
+                    link.textContent = `@${match[1]}`;
                 }
             }
         });
